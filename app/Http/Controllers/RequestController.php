@@ -18,20 +18,12 @@ class RequestController extends Controller
     }
     public function store(StoreTowingRequest $request): JsonResponse
     {
-        try {
-            $towingRequest = $this->towingRequestService->create($request->validated());
+        $towingRequest = $this->towingRequestService->create($request->validated());
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Towing request created successfully',
-                'data' => $towingRequest
-            ], 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to create towing request',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Towing request created successfully',
+            'data' => $towingRequest
+        ], 201);
     }
 }
