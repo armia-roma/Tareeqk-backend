@@ -6,9 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\TowingRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
+use App\Services\TowingRequestService;
 class RequestController extends Controller
 {
+    protected $towingRequestService;
+    public function __construct(TowingRequestService $towingRequestService)
+{
+    $this->towingRequestService = $towingRequestService;
+}
     public function store(Request $request)
     {
         try {
@@ -20,13 +25,7 @@ class RequestController extends Controller
                 'note' => 'nullable|string|max:1000',
             ]);
 
-            $towingRequest = TowingRequest::create([
-                'customer_id' => $validated['customer_id'],
-                'lat' => $validated['lat'],
-                'lang' => $validated['lang'],
-                'note' => $validated['note'] ?? '',
-                'status' => 'pending',
-            ]);
+            $towingRequest = $this->towingRequestService->create($validated);
 
             return response()->json([
                 'success' => true,
