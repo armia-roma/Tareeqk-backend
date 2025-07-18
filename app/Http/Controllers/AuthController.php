@@ -3,54 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Helper\ResponseHelper;
+use App\Http\Requests\LoginRequest;
+use App\Services\AuthService;
+
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+
+    public function __construct(protected AuthService $authService)
+    {}
+
+    public function login(LoginRequest $request)
     {
-        $credentials = $request->only('email', 'password');
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('auth-token')->plainTextToken;
-
-            return response()->json([
-                'success' => true,
-                'message' => 'User logged in successfully',
-                'data' => [
-                    'token' => $token,
-                ]
-            ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Invalid credentials',
-        ], 401);
+        $result = $this->authService->login($request->only('email', 'password'));
+        return ResponseHelper::success($result, 'User logged in successfully');
     }
+
     public function register(RegisterRequest $request)
     {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-        Auth::attempt(  [
-            'email' => $request->email,
-            'password' => $request->password,
-        ]);
-        $user = Auth::user();
-        $token = $user->createToken('auth-token')->plainTextToken;
+        $data = $request->only('name', 'email', 'password');
+        $result = $this->authService->register($data);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'User registered successfully',
-            'data' => [
-                'token' => $token,
-            ]
-        ]);
+        if($result['success']) {
+            return ResponseHelper::success($result['auth_user'], 'User register success');
+        }
     }
 }
