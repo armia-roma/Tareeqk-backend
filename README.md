@@ -19,7 +19,9 @@ Tareeqk is connects users needing vehicle assistance with towing service provide
 -   `POST /api/register` - User registration
 -   `POST /api/login` - User login with token generation
 -   `POST /api/logout` - User logout (protected)
--   `GET /api/user` - Get authenticated user details (protected)
+-   `GET /api/requests/pending` - Get pending towing requests
+-   `POST /api/requests` - Create a new towing request
+-   `POST /api/requests/{id}/cancel` - Cancel a towing request
 
 ## Installation
 
