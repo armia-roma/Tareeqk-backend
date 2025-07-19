@@ -38,4 +38,22 @@ class RequestController extends Controller
             'data' => $cancelledRequest
         ]);
     }
+
+    /**
+     * Get pending towing requests for the authenticated client
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getPendingRequests(Request $request): JsonResponse
+    {
+
+        $pendingRequests = $this->towingRequestService->getPendingRequests();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pending towing requests retrieved successfully',
+            'data' => $pendingRequests
+        ]);
+    }
 }

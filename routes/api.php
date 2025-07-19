@@ -12,3 +12,4 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/requests', [RequestController::class, 'store']);
 Route::post('/requests/{id}/cancel', [RequestController::class, 'cancel']);
+Route::get('/requests/pending', [RequestController::class, 'getPendingRequests']);

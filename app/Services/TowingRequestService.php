@@ -36,4 +36,17 @@ class TowingRequestService
             'status' => 'cancelled',
         ]);
     }
+
+    /**
+     * Get pending towing requests for a specific client
+     * 
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function getPendingRequests()
+    {
+        return TowingRequest::where('status', 'pending')
+            ->with('customer:id,name')
+            ->latest()
+            ->first();
+    }
 }
