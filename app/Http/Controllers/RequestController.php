@@ -26,4 +26,16 @@ class RequestController extends Controller
             'data' => $towingRequest
         ], 201);
     }
+
+    public function cancel(Request $request, $id): JsonResponse
+    {
+
+        $cancelledRequest = $this->towingRequestService->cancel($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Towing request cancelled successfully',
+            'data' => $cancelledRequest
+        ]);
+    }
 }
